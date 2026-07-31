@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fraud-worker
+  labels:
+    app: fraud-worker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fraud-worker
+  template:
+    metadata:
+      labels:
+        app: fraud-worker
+    spec:
+      containers:
+      - name: fraud-worker
+        image: <your-aws-ecr-repo-url>/fraud-worker:latest
+        env:
+        - name: AWS_REGION
+          value: "ap-south-1"
+        resources:
+          limits:
+            cpu: "100m"
+            memory: "128Mi"
+          requests:
+            cpu: "50m"
+            memory: "64Mi"
