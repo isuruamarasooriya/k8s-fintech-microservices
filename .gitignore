@@ -4,3 +4,8 @@ node_modules/
 **/.env
 dist/
 build/
+
+.terraform/
+*.tfstate
+*.tfstate.*
+.terraform.lock.hcl

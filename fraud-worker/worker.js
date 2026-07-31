@@ -1,21 +1,15 @@
 const dns = require('dns');
 dns.setServers(['8.8.8.8', '8.8.4.4']);
-
-const mongoose = require('mongoose');
 require('dotenv').config();
 
-const MONGO_URI = process.env.MONGO_URI;
-mongoose.connect(MONGO_URI).then(() => console.log("Fraud Worker: MongoDB Connected"));
+const { DynamoDBClient } = require("@aws-sdk/client-dynamodb");
+const { DynamoDBDocumentClient, ScanCommand, UpdateCommand } = require("@aws-sdk/lib-dynamodb");
 
-const TxSchema = new mongoose.Schema({
-    txId: String,
-    userId: String,
-    amount: Number,
-    country: String,
-    status: String,
-    timestamp: Date
-});
-const Transaction = mongoose.model('Transaction', TxSchema);
+const clientDb = new DynamoDBClient({ region: process.env.AWS_REGION || "ap-south-1" });
+const dynamoDb = DynamoDBDocumentClient.from(clientDb);
+const TABLE_NAME = "fintech-k8s-transactions";
+
+console.log("Fraud Worker: Connected to AWS DynamoDB");
 
 function analyzeRisk(tx) {
     if (tx.amount > 500000) {
@@ -28,12 +22,28 @@ function analyzeRisk(tx) {
 
 async function processPendingTransactions() {
     try {
-        const pendingTxs = await Transaction.find({ status: "PENDING" }).limit(10);
+        const params = {
+            TableName: TABLE_NAME,
+            FilterExpression: "#st = :pendingStatus",
+            ExpressionAttributeNames: { "#st": "status" },
+            ExpressionAttributeValues: { ":pendingStatus": "PENDING" }
+        };
+
+        const data = await dynamoDb.send(new ScanCommand(params));
+        const pendingTxs = (data.Items || []).slice(0, 10);
         
         for (let tx of pendingTxs) {
             const newStatus = analyzeRisk(tx);
-            tx.status = newStatus;
-            await tx.save();
+            
+            const updateParams = {
+                TableName: TABLE_NAME,
+                Key: { txId: tx.txId },
+                UpdateExpression: "SET #st = :newStatus",
+                ExpressionAttributeNames: { "#st": "status" },
+                ExpressionAttributeValues: { ":newStatus": newStatus }
+            };
+
+            await dynamoDb.send(new UpdateCommand(updateParams));
             
             if (newStatus !== "SAFE") {
                 console.log(`FRAUD DETECTED! Tx: ${tx.txId} -> [${newStatus}]`);
