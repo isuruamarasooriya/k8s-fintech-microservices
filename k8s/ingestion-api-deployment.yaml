@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: ingestion-api
-        image: <your-aws-ecr-repo-url>/ingestion-api:latest
+        image: 802104113126.dkr.ecr.ap-south-1.amazonaws.com/ingestion-api:latest
         ports:
         - containerPort: 5001
         env:

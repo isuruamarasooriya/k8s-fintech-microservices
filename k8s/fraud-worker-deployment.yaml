@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: fraud-worker
-        image: <your-aws-ecr-repo-url>/fraud-worker:latest
+        image: 802104113126.dkr.ecr.ap-south-1.amazonaws.com/fraud-worker:latest
         env:
         - name: AWS_REGION
           value: "ap-south-1"
