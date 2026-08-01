@@ -34,11 +34,6 @@ jobs:
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
 
-    - name: Create ECR Repositories if they don't exist
-      run: |
-        aws ecr describe-repositories --repository-names ingestion-api || aws ecr create-repository --repository-name ingestion-api
-        aws ecr describe-repositories --repository-names fraud-worker || aws ecr create-repository --repository-name fraud-worker
-
     - name: Build and push Ingestion API
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
