@@ -1,5 +1,13 @@
 data "aws_caller_identity" "current" {}
 
+data "aws_cloudfront_cache_policy" "caching_disabled" {
+  name = "Managed-CachingDisabled"
+}
+
+data "aws_cloudfront_origin_request_policy" "all_viewer" {
+  name = "Managed-AllViewer"
+}
+
 resource "aws_s3_bucket" "frontend_bucket" {
   bucket        = "${var.project_name}-frontend-${data.aws_caller_identity.current.account_id}"
   force_destroy = true
@@ -23,6 +31,18 @@ resource "aws_cloudfront_distribution" "frontend_cdn" {
     origin_access_control_id = aws_cloudfront_origin_access_control.frontend_oac.id
   }
 
+  origin {
+    domain_name = "k8s-default-fintechi-d4c503915c-1227709213.ap-south-1.elb.amazonaws.com"
+    origin_id   = "ALBOrigin"
+
+    custom_origin_config {
+      http_port              = 80
+      https_port             = 443
+      origin_protocol_policy = "http-only"
+      origin_ssl_protocols   = ["TLSv1.2"]
+    }
+  }
+
   default_cache_behavior {
     allowed_methods        = ["GET", "HEAD", "OPTIONS"]
     cached_methods         = ["GET", "HEAD"]
@@ -35,6 +55,18 @@ resource "aws_cloudfront_distribution" "frontend_cdn" {
         forward = "none"
       }
     }
+  }
+
+  ordered_cache_behavior {
+    path_pattern     = "/api/*"
+    allowed_methods  = ["GET", "HEAD", "OPTIONS", "PUT", "POST", "PATCH", "DELETE"]
+    cached_methods   = ["GET", "HEAD", "OPTIONS"]
+    target_origin_id = "ALBOrigin"
+
+    cache_policy_id          = data.aws_cloudfront_cache_policy.caching_disabled.id
+    origin_request_policy_id = data.aws_cloudfront_origin_request_policy.all_viewer.id
+
+    viewer_protocol_policy = "https-only"
   }
 
   restrictions {
