@@ -1,6 +1,9 @@
 name: Build and Push Docker Images to ECR
 
 on:
+  push:
+    branches:
+      - main
   workflow_dispatch:
 
 jobs:
