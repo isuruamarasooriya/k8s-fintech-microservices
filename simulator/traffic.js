@@ -27,4 +27,4 @@ async function sendFakeTransaction() {
 }
 
 console.log("Starting Traffic Simulator...");
-setInterval(sendFakeTransaction, 25);
+setInterval(sendFakeTransaction, 2500);
