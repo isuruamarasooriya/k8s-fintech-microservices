@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: fraud-worker
-        image: 802104113126.dkr.ecr.ap-south-1.amazonaws.com/fraud-worker:0e533b1968e025cadc622e53fe525babeee7484c
+        image: 802104113126.dkr.ecr.ap-south-1.amazonaws.com/fraud-worker:acfc5d31c4e308d6f218b8f0c733819de9013289
         env:
         - name: AWS_REGION
           value: "ap-south-1"
