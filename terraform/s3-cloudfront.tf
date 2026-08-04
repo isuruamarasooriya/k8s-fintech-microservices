@@ -32,7 +32,7 @@ resource "aws_cloudfront_distribution" "frontend_cdn" {
   }
 
   origin {
-    domain_name = "k8s-default-fintechi-d4c503915c-1227709213.ap-south-1.elb.amazonaws.com"
+    domain_name = "k8s-default-fintechi-d4c503915c-396452046.ap-south-1.elb.amazonaws.com"
     origin_id   = "ALBOrigin"
 
     custom_origin_config {
