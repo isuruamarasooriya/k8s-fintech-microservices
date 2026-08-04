@@ -23,6 +23,10 @@ const TABLE_NAME = "fintech-k8s-transactions";
 
 console.log("Ingestion API: Connected to AWS DynamoDB");
 
+app.get('/health', (req, res) => {
+    res.status(200).send('OK');
+});
+
 app.post('/api/transactions', async (req, res) => {
     try {
         const { txId, userId, amount, country } = req.body;
