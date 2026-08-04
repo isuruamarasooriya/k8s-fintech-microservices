@@ -64,18 +64,18 @@ jobs:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         IMAGE_TAG: ${{ github.sha }}
       run: |
-        sed -i -E "s|(image: .*/ingestion-api):.*|\1:$IMAGE_TAG|g" k8s/ingestion-api-deployment.yaml
-        sed -i -E "s|(image: .*/fraud-worker):.*|\1:$IMAGE_TAG|g" k8s/fraud-worker-deployment.yaml
-        
         git config --global user.email "github-actions[bot]@users.noreply.github.com"
         git config --global user.name "github-actions[bot]"
-       
-        git pull origin main --rebase
+        
+        git pull "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" main --rebase
+        
+        sed -i -E "s|(image: .*/ingestion-api):.*|\1:$IMAGE_TAG|g" k8s/ingestion-api-deployment.yaml
+        sed -i -E "s|(image: .*/fraud-worker):.*|\1:$IMAGE_TAG|g" k8s/fraud-worker-deployment.yaml
         
         git add k8s/
         git commit -m "Update image tags to $IMAGE_TAG for ArgoCD [skip ci]" || echo "No changes to commit"
         
-        git push origin main
+        git push "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" main
 
   deploy-frontend-to-s3:
     runs-on: ubuntu-latest
