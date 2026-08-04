@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: ingestion-api
-        image: 802104113126.dkr.ecr.ap-south-1.amazonaws.com/ingestion-api:7198986fdd28c986dd81298b1f1185ecf045a6a8
+        image: 802104113126.dkr.ecr.ap-south-1.amazonaws.com/ingestion-api:e657cc1c56276b80f44e1b57f11907b5683b07fa
         ports:
         - containerPort: 5001
         env:
