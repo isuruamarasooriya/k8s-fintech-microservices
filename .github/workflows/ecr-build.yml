@@ -69,9 +69,12 @@ jobs:
         
         git config --global user.email "github-actions[bot]@users.noreply.github.com"
         git config --global user.name "github-actions[bot]"
+       
+        git pull origin main --rebase
         
         git add k8s/
-        git commit -m "Update image tags to $IMAGE_TAG for ArgoCD" || echo "No changes to commit"
+        git commit -m "Update image tags to $IMAGE_TAG for ArgoCD [skip ci]" || echo "No changes to commit"
+        
         git push origin main
 
   deploy-frontend-to-s3:
