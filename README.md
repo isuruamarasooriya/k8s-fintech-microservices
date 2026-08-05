@@ -6,14 +6,6 @@ This project integrates custom-built microservices (Node.js/React) with a fully 
 
 ---
 
-## 🎥 Project Demo
-*(Watch the live demonstration of the FinTech Real-Time Fraud Monitor and automated deployment pipeline here)*
-
-[![Watch the Demo](https://img.youtube.com/vi/YOUR_YOUTUBE_VIDEO_ID/maxresdefault.jpg)](https://www.youtube.com/watch?v=YOUR_YOUTUBE_VIDEO_ID)
-> **Note:** Replace `YOUR_YOUTUBE_VIDEO_ID` with your actual video link, or embed your video directly if hosted on GitHub.
-
----
-
 ## 📸 System Screenshots
 
 ### 1. Live FinTech Fraud Monitor Dashboard (Served via CloudFront & ALB)
@@ -62,7 +54,7 @@ The application simulates a real-time FinTech environment, processing transactio
                           |
                           v
                    Amazon DynamoDB <---- Fraud Worker (Polling)
-
+```
 
 
 ### Automated Fraud Detection Logic
