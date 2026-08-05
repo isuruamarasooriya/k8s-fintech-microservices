@@ -1,6 +1,6 @@
 # Cloud-Native FinTech Microservices Platform 
 
-An end-to-end, cloud-native financial transaction processing platform demonstrating modern DevOps, GitOps, and Serverless architecture. 
+A scalable, cloud-native FinTech microservices platform featuring automated CI/CD, GitOps deployments, and resilient cloud architecture. 
 
 This project integrates custom-built microservices (Node.js/React) with a fully automated CI/CD pipeline, dynamic infrastructure provisioning via Terraform, and GitOps deployments using ArgoCD on Amazon EKS.
 
@@ -98,6 +98,16 @@ This project utilizes a fully automated pipeline triggered by pushes to the main
 4. **GitOps Trigger:** Commits the updated YAML files back to the repository by a GitHub Actions bot.
 5. **ArgoCD Sync:** ArgoCD detects the changes in the Git repository and seamlessly rolls out the new application versions to the EKS cluster.
 6. **Frontend Deployment:** Builds the Vite application, syncs the static files to the S3 bucket, and triggers a CloudFront cache invalidation.
+
+---
+
+# Local Testing & Traffic Simulation
+
+To test the live fraud-detection workflow, auto-scaling, and dashboard in real time, you can run the local traffic generator:
+
+1. **Port-forward the Ingestion API service** (if accessing the cluster locally):
+   ```bash
+   kubectl port-forward svc/ingestion-api-service 5001:80
 
 ---
 
